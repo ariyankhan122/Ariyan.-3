@@ -1,5 +1,5 @@
 {
-  "Author": "SHAHADAT SAHU",
+  "Author": "MAHADI Ai Bot",
   "version": "2.0.1",
   "language": "en",
   "DeveloperMode": false,
@@ -7,21 +7,21 @@
   "autoClean": true,
   "notiGroup": true,
   "NOTIFICATION": true,
-  "EMAIL": "your_email",
+  "EMAIL": "mahadihasanrony591@gmail.com",
   "PASSWORD": "your_password",
   "OTPKEY": "",
-  "BOTNAME": "─꯭─⃝‌‌𝐒𝐡𝐚𝐡𝐚𝐝𝐚𝐭 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭",
+  "BOTNAME": "─꯭─⃝‌‌Mahadi 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭",
   "PREFIX": "/",
 
   "reactUnsend": ["😡", "🤧", "😤", "😠"],
 
   "ADMINBOT": [
-    "100001039692046",
-    "61586663640809",
-    "100044713412032"
+    "1034809242734023",
+    "",
+    ""
   ],
   "NDH": [
-    "100044713412032"
+    "1034809242734023"
   ],
   "adminOnly": false,
   "ndhOnly": false,
