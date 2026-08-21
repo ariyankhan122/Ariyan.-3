@@ -6,7 +6,7 @@ module.exports.config = {
     name: "help",
     version: "2.0.0",
     hasPermssion: 0,
-    credits: "SHAHADAT SAHU",
+    credits: "ARIYAN",
     description: "Shows all commands with details",
     commandCategory: "system",
     usages: "[command name/page number]",
@@ -32,7 +32,7 @@ module.exports.languages = {
 ┣━━━━━━━━━━━━━━━━┫
 ┃ ⚙ Prefix: %8
 ┃ 🤖 Bot Name: %9
-┃ 👑 Owner: 𝐒𝐇𝐀𝐇𝐀𝐃𝐀𝐓 𝐒𝐀𝐇𝐔
+┃ 👑 Owner: 𝐀𝐑𝐈𝐘𝐀𝐍
 ╰━━━━━━━━━━━━━━━━╯`,
         "helpList": "[ There are %1 commands. Use: \"%2help commandName\" to view more. ]",
         "user": "User",
@@ -41,7 +41,7 @@ module.exports.languages = {
     }
 };
 
-// 🔹 এখানে আপনার ফটো Imgur লিংক করে বসাবেন ✅
+// 🔹 Help Images
 const helpImages = [
     "https://i.imgur.com/gokzyKd.jpeg",
     "https://i.imgur.com/g3hlQ0Z.jpeg",
@@ -49,90 +49,229 @@ const helpImages = [
     "https://i.imgur.com/5dG8PS5.jpeg"
 ];
 
-
 function downloadImages(callback) {
-    const randomUrl = helpImages[Math.floor(Math.random() * helpImages.length)];
-    const filePath = path.join(__dirname, "cache", "help_random.jpg");
+    const randomUrl =
+        helpImages[Math.floor(Math.random() * helpImages.length)];
+
+    const cacheDir = path.join(__dirname, "cache");
+
+    fs.ensureDirSync(cacheDir);
+
+    const filePath =
+        path.join(cacheDir, "help_random.jpg");
 
     request(randomUrl)
         .pipe(fs.createWriteStream(filePath))
         .on("close", () => callback([filePath]));
 }
 
-module.exports.handleEvent = function ({ api, event, getText }) {
+module.exports.handleEvent = function ({
+    api,
+    event,
+    getText
+}) {
     const { commands } = global.client;
-    const { threadID, messageID, body } = event;
+    const {
+        threadID,
+        messageID,
+        body
+    } = event;
 
-    if (!body || typeof body === "undefined" || body.indexOf("help") != 0) return;  
-    const splitBody = body.slice(body.indexOf("help")).trim().split(/\s+/);  
-    if (splitBody.length < 2 || !commands.has(splitBody[1].toLowerCase())) return;  
+    if (
+        !body ||
+        typeof body === "undefined" ||
+        body.indexOf("help") != 0
+    ) {
+        return;
+    }
 
-    const threadSetting = global.data.threadData.get(parseInt(threadID)) || {};  
-    const command = commands.get(splitBody[1].toLowerCase());  
-    const prefix = threadSetting.PREFIX || global.config.PREFIX;  
+    const splitBody = body
+        .slice(body.indexOf("help"))
+        .trim()
+        .split(/\s+/);
 
-    const detail = getText("moduleInfo",  
-        command.config.name,  
-        command.config.usages || "Not Provided",  
-        command.config.description || "Not Provided",  
-        command.config.hasPermssion,  
-        command.config.credits || "Unknown",  
-        command.config.commandCategory || "Unknown",  
-        command.config.cooldowns || 0,  
-        prefix,  
-        global.config.BOTNAME || "𝐒𝐡𝐚𝐡𝐚𝐝𝐚𝐭 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭"  
-    );  
+    if (
+        splitBody.length < 2 ||
+        !commands.has(
+            splitBody[1].toLowerCase()
+        )
+    ) {
+        return;
+    }
 
-    downloadImages(files => {  
-        const attachments = files.map(f => fs.createReadStream(f));  
-        api.sendMessage({ body: detail, attachment: attachments }, threadID, () => {  
-            files.forEach(f => fs.unlinkSync(f));  
-        }, messageID);  
+    const threadSetting =
+        global.data.threadData.get(
+            parseInt(threadID)
+        ) || {};
+
+    const command =
+        commands.get(
+            splitBody[1].toLowerCase()
+        );
+
+    const prefix =
+        threadSetting.PREFIX ||
+        global.config.PREFIX;
+
+    const detail = getText(
+        "moduleInfo",
+        command.config.name,
+        command.config.usages ||
+            "Not Provided",
+        command.config.description ||
+            "Not Provided",
+        command.config.hasPermssion,
+        command.config.credits ||
+            "Unknown",
+        command.config.commandCategory ||
+            "Unknown",
+        command.config.cooldowns ||
+            0,
+        prefix,
+        global.config.BOTNAME ||
+            "𝐀𝐫𝐢𝐲𝐚𝐧 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭"
+    );
+
+    downloadImages(files => {
+        const attachments =
+            files.map(f =>
+                fs.createReadStream(f)
+            );
+
+        api.sendMessage(
+            {
+                body: detail,
+                attachment: attachments
+            },
+            threadID,
+            () => {
+                files.forEach(f => {
+                    if (fs.existsSync(f)) {
+                        fs.unlinkSync(f);
+                    }
+                });
+            },
+            messageID
+        );
     });
 };
 
-module.exports.run = function ({ api, event, args, getText }) {
+module.exports.run = function ({
+    api,
+    event,
+    args,
+    getText
+}) {
     const { commands } = global.client;
-    const { threadID, messageID } = event;
 
-    const threadSetting = global.data.threadData.get(parseInt(threadID)) || {};  
-    const prefix = threadSetting.PREFIX || global.config.PREFIX;  
+    const {
+        threadID,
+        messageID
+    } = event;
 
-    if (args[0] && commands.has(args[0].toLowerCase())) {  
-        const command = commands.get(args[0].toLowerCase());  
+    const threadSetting =
+        global.data.threadData.get(
+            parseInt(threadID)
+        ) || {};
 
-        const detailText = getText("moduleInfo",  
-            command.config.name,  
-            command.config.usages || "Not Provided",  
-            command.config.description || "Not Provided",  
-            command.config.hasPermssion,  
-            command.config.credits || "Unknown",  
-            command.config.commandCategory || "Unknown",  
-            command.config.cooldowns || 0,  
-            prefix,  
-            global.config.BOTNAME || "𝐒𝐡𝐚𝐡𝐚𝐝𝐚𝐭 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭"  
-        );  
+    const prefix =
+        threadSetting.PREFIX ||
+        global.config.PREFIX;
 
-        downloadImages(files => {  
-            const attachments = files.map(f => fs.createReadStream(f));  
-            api.sendMessage({ body: detailText, attachment: attachments }, threadID, () => {  
-                files.forEach(f => fs.unlinkSync(f));  
-            }, messageID);  
-        });  
-        return;  
-    }  
+    if (
+        args[0] &&
+        commands.has(
+            args[0].toLowerCase()
+        )
+    ) {
+        const command =
+            commands.get(
+                args[0].toLowerCase()
+            );
 
-    const arrayInfo = Array.from(commands.keys())
-        .filter(cmdName => cmdName && cmdName.trim() !== "")
-        .sort();  
+        const detailText = getText(
+            "moduleInfo",
+            command.config.name,
+            command.config.usages ||
+                "Not Provided",
+            command.config.description ||
+                "Not Provided",
+            command.config.hasPermssion,
+            command.config.credits ||
+                "Unknown",
+            command.config.commandCategory ||
+                "Unknown",
+            command.config.cooldowns ||
+                0,
+            prefix,
+            global.config.BOTNAME ||
+                "𝐀𝐫𝐢𝐲𝐚𝐧 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭"
+        );
 
-    const page = Math.max(parseInt(args[0]) || 1, 1);  
-    const numberOfOnePage = 20;  
-    const totalPages = Math.ceil(arrayInfo.length / numberOfOnePage);  
-    const start = numberOfOnePage * (page - 1);  
-    const helpView = arrayInfo.slice(start, start + numberOfOnePage);  
+        downloadImages(files => {
+            const attachments =
+                files.map(f =>
+                    fs.createReadStream(f)
+                );
 
-    let msg = helpView.map(cmdName => `┃ ✪ ${cmdName}`).join("\n");
+            api.sendMessage(
+                {
+                    body: detailText,
+                    attachment: attachments
+                },
+                threadID,
+                () => {
+                    files.forEach(f => {
+                        if (fs.existsSync(f)) {
+                            fs.unlinkSync(f);
+                        }
+                    });
+                },
+                messageID
+            );
+        });
+
+        return;
+    }
+
+    const arrayInfo =
+        Array.from(commands.keys())
+            .filter(
+                cmdName =>
+                    cmdName &&
+                    cmdName.trim() !== ""
+            )
+            .sort();
+
+    const page =
+        Math.max(
+            parseInt(args[0]) || 1,
+            1
+        );
+
+    const numberOfOnePage = 20;
+
+    const totalPages =
+        Math.ceil(
+            arrayInfo.length /
+            numberOfOnePage
+        );
+
+    const start =
+        numberOfOnePage *
+        (page - 1);
+
+    const helpView =
+        arrayInfo.slice(
+            start,
+            start + numberOfOnePage
+        );
+
+    let msg = helpView
+        .map(cmdName =>
+            `┃ ✪ ${cmdName}`
+        )
+        .join("\n");
 
     const text = `╭━━━━━━━━━━━━━━━━╮
 ┃ 📜 𝐂𝐎𝐌𝐌𝐀𝐍𝐃 𝐋𝐈𝐒𝐓 📜
@@ -143,14 +282,33 @@ module.exports.run = function ({ api, event, args, getText }) {
 ${msg}
 ┣━━━━━━━━━━━━━━━━┫
 ┃ ⚙ Prefix: ${prefix}
-┃ 🤖 Bot Name: ${global.config.BOTNAME || "𝐒𝐡𝐚𝐡𝐚𝐝𝐚𝐭 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭"}
-┃ 👑 Owner: 𝐒𝐇𝐀𝐇𝐀𝐃𝐀𝐓 𝐒𝐀𝐇𝐔
+┃ 🤖 Bot Name: ${
+    global.config.BOTNAME ||
+    "𝐀𝐫𝐢𝐲𝐚𝐧 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭"
+}
+┃ 👑 Owner: 𝐀𝐑𝐈𝐘𝐀𝐍
 ╰━━━━━━━━━━━━━━━━╯`;
 
-    downloadImages(files => {  
-        const attachments = files.map(f => fs.createReadStream(f));  
-        api.sendMessage({ body: text, attachment: attachments }, threadID, () => {  
-            files.forEach(f => fs.unlinkSync(f));  
-        }, messageID);  
-    });  
+    downloadImages(files => {
+        const attachments =
+            files.map(f =>
+                fs.createReadStream(f)
+            );
+
+        api.sendMessage(
+            {
+                body: text,
+                attachment: attachments
+            },
+            threadID,
+            () => {
+                files.forEach(f => {
+                    if (fs.existsSync(f)) {
+                        fs.unlinkSync(f);
+                    }
+                });
+            },
+            messageID
+        );
+    });
 };
