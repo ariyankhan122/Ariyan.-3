@@ -1,117 +1,137 @@
-const axios = require("axios");
-const fs = require('fs')
-const baseApiUrl = async () => {
-const base = await axios.get(
-https://raw.githubusercontent.com/Mostakim0978/D1PT0/refs/heads/main/baseApiUrl.json,
-);
-return base.data.api;
-};
-module.exports.config = {
-name: "song",
-version: "2.1.0",
-aliases: [ "music", "play"],
-credits: "dipto",
-countDown: 5,
-hasPermssion: 0,
-description: "Download audio from YouTube",
-category: "media",
-commandCategory: "media",
-usePrefix: true,
-prefix: true,
-usages: "{pn} [<song name>|<song link>]:"+ "\n   Example:"+"\n{pn} chipi chipi chapa chapa"
-}
-module.exports.run = async ({api,args, event,commandName, message }) =>{
-const checkurl = /^(?:https?://)?(?:m.|www.)?(?:youtu.be/|youtube.com/(?:embed/|v/|watch?v=|watch?.+&v=|shorts/))((\w|-){11})(?:\S+)?$/;
-let videoID;
-const urlYtb = checkurl.test(args[0]);
-
-if (urlYtb) {
-const match = args[0].match(checkurl);
-videoID = match ? match[1] : null;
-const { data: { title, downloadLink } } = await axios.get(
-${await baseApiUrl()}/ytDl3?link=${videoID}&format=mp3
-);
-return  api.sendMessage({
-body: title,
-attachment: await dipto(downloadLink,'audio.mp3')
-},event.threadID,()=>fs.unlinkSync('audio.mp3'),event.messageID)
-}
-let keyWord = args.join(" ");
-keyWord = keyWord.includes("?feature=share") ? keyWord.replace("?feature=share", "") : keyWord;
-const maxResults = 6;
-let result;
-try {
-result = ((await axios.get(${await baseApiUrl()}/ytFullSearch?songName=${keyWord})).data).slice(0, maxResults);
-} catch (err) {
-return api.sendMessage("❌ An error occurred:"+err.message,event.threadID,event.messageID);
-}
-if (result.length == 0)
-return api.sendMessage("⭕ No search results match the keyword:"+ keyWord,event.threadID,event.messageID);
-let msg = "";
-let i = 1;
-const thumbnails = [];
-for (const info of result) {
-thumbnails.push(diptoSt(info.thumbnail,'photo.jpg'));
-msg += ${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n;
-}
-api.sendMessage({
-body: msg+ "Reply to this message with a number want to listen",
-attachment: await Promise.all(thumbnails)
-},event.threadID, (err, info) => {
-global.client.handleReply.push({
-name: this.config.name,
-messageID: info.messageID,
-author: event.senderID,
-result
-});
-},event.messageID);
-}
-module.exports.handleReply = async ({ event, api, handleReply }) => {
-try {
-const { result } = handleReply;
-const choice = parseInt(event.body);
-if (!isNaN(choice) && choice <= result.length && choice > 0) {
-const infoChoice = result[choice - 1];
-const idvideo = infoChoice.id;
-const { data: { title, downloadLink ,quality} } = await axios.get(${await baseApiUrl()}/ytDl3?link=${idvideo}&format=mp3);
-await api.unsendMessage(handleReply.messageID)
-await  api.sendMessage({
-body: • Title: ${title}\n• Quality: ${quality},
-attachment: await dipto(downloadLink,'audio.mp3')
-},event.threadID ,
-()=>fs.unlinkSync('audio.mp3')
-,event.messageID)
-} else {
-api.sendMessage("Invalid choice. Please enter a number between 1 and 6.",event.threadID,event.messageID);
-}
-} catch (error) {
-console.log(error);
-api.sendMessage("⭕ Sorry, audio size was less than 26MB",event.threadID,event.messageID)
-}
-};
-async function dipto(url,pathName) {
-try {
-const response = (await axios.get(url,{
-responseType: "arraybuffer"
-})).data;
-
-fs.writeFileSync(pathName, Buffer.from(response));  
-return fs.createReadStream(pathName);
-
-}
-catch (err) {
-throw err;
-}
-}
-async function diptoSt(url,pathName) {
-try {
-const response = await axios.get(url,{
-responseType: "stream"
-});
-response.data.path = pathName;
-return response.data;
-}
-catch (err) {
-throw err;
-}
-                                                                                                                   }
+[
+    {
+        "key": "dbln",
+        "value": "%7B%2261590586947853%22%3A%22JTagCydo%22%2C%2261592847595658%22%3A%22gbS2b5TO%22%2C%2261591726817916%22%3A%22lOoMUglc%22%2C%2261592535218745%22%3A%22farEL0F2%22%7D",
+        "domain": "facebook.com",
+        "path": "/login/device-based/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.868Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "datr",
+        "value": "9pweatSl8MpMsYWATnCcREwn",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "sb",
+        "value": "95weammR6Rzm0VCM6vutcDgm",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "ps_l",
+        "value": "1",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "ps_n",
+        "value": "1",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "vpd",
+        "value": "v1%3B730x393x2.75",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "locale",
+        "value": "en_GB",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "pas",
+        "value": "61590586947853%3ASRFP5a0YiF%2C61592847595658%3Ajt5bqPlpU2%2C61591726817916%3AR1mAkoXPYW%2C61592535218745%3AGSDr2iHW0B",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "m_pixel_ratio",
+        "value": "2.75",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "wd",
+        "value": "393x873",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "c_user",
+        "value": "61592535218745",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "xs",
+        "value": "46%3AvtzGbBBHsK-d5Q%3A2%3A1787299130%3A-1%3A-1",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "fr",
+        "value": "0KOE4jNedPoA04sGw.AWds-l-jxe3Aq9cCTzvv2it5pDIdQYaw6fRZAMD1obINxlPDwqE.BqHpz3..AAA.0.0.BqiAVA.AWftLztW81gNG41HacrIHoZxZAw",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "fbl_st",
+        "value": "101025549%3BT%3A29788318",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    },
+    {
+        "key": "wl_cbv",
+        "value": "v2%3Bclient_version%3A3255%3Btimestamp%3A1787299136",
+        "domain": "facebook.com",
+        "path": "/",
+        "hostOnly": false,
+        "creation": "2026-08-21T08:07:03.870Z",
+        "lastAccessed": "2026-08-21T08:07:03.870Z"
+    }
+]
