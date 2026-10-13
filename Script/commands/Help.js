@@ -43,10 +43,10 @@ module.exports.languages = {
 
 // 🔹 Help Images
 const helpImages = [
-    "https://i.imgur.com/gokzyKd.jpeg",
-    "https://i.imgur.com/g3hlQ0Z.jpeg",
-    "https://i.imgur.com/L7txp4M.jpeg",
-    "https://i.imgur.com/5dG8PS5.jpeg"
+    "https://i.imgur.com/a/MAdkrF3.jpeg",
+    "https://i.imgur.com/a/MAdkrF3.jpeg",
+    "https://i.imgur.com/a/MAdkrF3.jpeg",
+    "https://i.imgur.com/a/MAdkrF3.jpeg"
 ];
 
 function downloadImages(callback) {
