@@ -57,7 +57,7 @@ ${botPrefix}Info
 ${botPrefix}Admin
 
 ★ যেকোনো অভিযোগ অথবা হেল্প এর জন্য এডমিন 𝐀𝐫𝐢𝐲𝐚𝐧 কে নক করতে পারেন ★
-➤𝐌𝐞𝐬𝐬𝐞𝐧𝐠𝐞𝐫: https://www.facebook.com/5G.TAMU78
+➤𝐌𝐞𝐬𝐬𝐞𝐧𝐠𝐞𝐫: https://www.facebook.com/profile.php?id=61595247926496
 ➤𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩: https://wa.me/+966572373693
 
 ❖⋆═══════════════════════⋆❖
